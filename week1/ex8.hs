@@ -6,6 +6,7 @@ even x = if (x `mod` 2) == 0
         then "Even"
         else "Odd"
 
+-- Guards
 five' :: Int -> String
 five' n
   | n == 5 = "Five"
