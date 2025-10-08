@@ -1,0 +1,39 @@
+-- Função de ordem superior: uma função que recebe outra
+-- Map tem dois ingredientes: uma função e uma lista. Aplica a função a todos os elementos da lista
+-- Ex: map(*2)[1,2,3] = [2,4,6]
+-- Ex: filterodd[1,2,3,4] = [1,3] - função que retorna um booleano - essa função já existe no preludio
+-- zipWith(+)[1,2,3][1,2,3] = [2,4,6] - um zip que vai juntar os elementos
+-- ((+2).(*3))10 - o ponto é fazre um seguida do outro - chama-se composição de funções
+--   f    y      - a função +2 é aplicada após *3
+-- sqrt$1+2+3 - $ é o operador da função de argumentos - só vai passra ao sqrt o input apenas após calcular tudo que está à direita! Se não tivesse $, daria 6, mas com $ deu como resultado sqrt (1+2+3). $ poupa o tempo de fechar os parênteses
+-- foldl (-)0[1,2,3] - uma função que vai mastigar uma lista, vai condensá-la em um valor, e esse valor é do mesmo tipo que um acumulador (variável que permite guardar o resultado intermédio do resultado).
+-- escreva a lista 1 2 3. COmo é left, o acumulado será o da esquerda (0). Fica 0 1 2 3. Junta os elementos com a função, ficando 0 -1 -2 -3. COmo é left, começam as operações pela esquerda, acumulador acompanha sempre o resultado. 
+-- primeiro: (0-1)-2-3
+-- Depois: (-1-2)-3
+-- Depois: -3-3
+-- Depois: -6
+-- O lambda fica: \ acc x -> acc -x)
+-- foldr (-)0[1,2,3]
+-- 1 2 3
+-- Acumulado é à direita: 1 2 3 0
+-- 1-(2-(3-0)
+-- 1-(2-3)
+-- 1-(-1)
+-- 2
+-- O lambda fica: \ x acc -> x -acc)
+-- Ambos folds tem 3 argumentos: função que será aplicada aos elementos da lista, valor inicial do acumulador, lista que será processada
+-- A foldl é O(n) e a foldr é O(n²)
+
+-- rev l = revAuxl[]
+-- revAux[]acc=acc
+-- revAux(x:xs)acc = revAux xs(x:acc)
+-- mais eficiente, mas pode não ser
+-- rev l = foldl(\ acc -> x:acc)[]l
+
+-- recursão naive, pode fazer sempre, mas nem sempre mais prática
+-- rev[]=[]
+-- rev(x:xs)rev xs ++ [x]
+-- mais genérico
+-- rev l = foldr(\ acc x -> acc++[x])[]l
+
+-- Currying - é um conceito relacionado a transformar funções de múltiplos argumentos em funções de um único argumento que retornam outras funções.
