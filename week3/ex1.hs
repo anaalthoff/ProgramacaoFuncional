@@ -37,3 +37,15 @@
 -- rev l = foldr(\ acc x -> acc++[x])[]l
 
 -- Currying - é um conceito relacionado a transformar funções de múltiplos argumentos em funções de um único argumento que retornam outras funções.
+
+-- Pode-se omitir argumentos em haskel, eles ficam implícitos
+-- Point free programming - tudo começa com uma operação básica
+-- f x = g x, assim, f = g, já que tudo que f recebe será igual ao que g recebe
+-- dec2int = foldl (\acc x -> acc*10 + x) 0 
+-- dec2int = foldl (\acc x -> (+) (acc*10) x) 0
+-- dec2int = foldl (\acc -> (+) (acc*10)) 0
+-- dec2int = foldl (\acc -> (+) (acc*10)) 0
+-- dec2int = foldl (\acc -> (+) ((*10) acc)) 0
+-- dec2int = foldl (\acc -> ((+).(*10)) acc) 0
+-- dec2int = foldl ((+).(*10)) 0
+
