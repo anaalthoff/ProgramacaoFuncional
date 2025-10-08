@@ -1,0 +1,1 @@
+-- 2.4 Write a definition of the exclusive or function xor :: Bool-> Bool-> Bool using multiple equations with patterns.
