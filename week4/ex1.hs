@@ -16,7 +16,7 @@ data Tree a = Leaf | Node a (Tree a) (Tree a) deriving (Eq, Show)
 -- data Maybe a = Nothing | Just a
 
 -- “sumTree é uma função que, para qualquer tipo numérico a, recebe uma árvore de elementos a e devolve um número do mesmo tipo a.”
-sumTree :: Num a => Tree a -> a
+sumTree :: (Num a) => Tree a -> a
 -- Caso base da recursão.
 -- Se a árvore é apenas uma folha (Leaf), então não há valor numérico para somar.
 -- Esse caso impede que a função continue recursivamente para sempre — é o “fim da árvore”.
@@ -32,14 +32,20 @@ myTree = Node 40 (Node 38 Leaf (Node 39 Leaf Leaf)) (Node 3 Leaf Leaf)
 data Lista a = Vazia | Carruagem a (Lista a)
 
 -- "procurarNaLista é uma função que recebe uma lista de pares (k, v) e uma chave k, e devolve um Maybe v."
-procurarNaLista :: Eq k => Lista (k,v) -> k -> Maybe v
+procurarNaLista :: (Eq k) => Lista (k, v) -> k -> Maybe v
 -- Caso base: lista vazia
 procurarNaLista Vazia _ = Nothing
 -- Caso recursivo: lista não vazia
 -- Fazre pattern Matching com os construtores
 procurarNaLista (Carruagem (chave, valor) cauda) k
--- É just valor, por ser um maybe
-    | chave == k = Just valor
-    | otherwise = procurarNaLista cauda k
+  -- É just valor, por ser um maybe
+  | chave == k = Just valor
+  | otherwise = procurarNaLista cauda k
 
--- Pattern matching - obter nomes para aprtes que representam a estrutra dos dados 
+-- Pattern matching - obter nomes para aprtes que representam a estrutra dos dados
+
+-- Maybe
+estaNaLista :: (Eq k) => Lista (k, v) -> k -> Bool
+estaNaLista l k = case procurarNaLista l k of
+  Nothing -> False
+  Just _ -> True
