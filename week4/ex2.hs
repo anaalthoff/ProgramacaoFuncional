@@ -9,3 +9,14 @@ ioSucc = do
     -- transforma integer em string
     let num = read input :: Int
     putStrLn $ "The next number is" ++ show (num + 1) ++ "."
+
+-- irá guardar a string
+myGetLine :: IO String
+myGetLine = do
+    x <- getChar
+    if x == '\n'
+        then return []
+        else do
+            -- todos os caracteres lidos, exceto o primeiro
+            xs <- myGetLine
+            return (x:xs)
