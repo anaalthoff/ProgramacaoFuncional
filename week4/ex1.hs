@@ -49,3 +49,14 @@ estaNaLista :: (Eq k) => Lista (k, v) -> k -> Bool
 estaNaLista l k = case procurarNaLista l k of
   Nothing -> False
   Just _ -> True
+
+--
+data Arv a = Empty | No a (Arv a) (Arv a) deriving Show
+
+-- Escreva uma definição recursiva da função abaixo
+sumArv :: Num a => Arv a -> a
+-- Caso base: árvore vazia
+sumArv Empty = 0
+-- Caso recursivo: árvore não vazia. Na definição da função, escrever 'No val esq dir' para extrair os valores do nó.
+-- No é apenas o construtor, não o nó em si
+sumArv (No val esq dir) = val + sumArv esq + sumArv dir
