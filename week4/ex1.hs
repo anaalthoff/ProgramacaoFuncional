@@ -10,7 +10,7 @@
 -- Diferença: com Data irá ter construtores. Uma função que instancia
 -- Como definir o tipo árvore
 -- Leaf e Node são construtores de valores, funções que recebem argumentos e devolvem instância do tipo tree. Leaf não tem argumentos, node tem argumentos, vai para a esquerda ou direita.
-data Tree a = Leaf | Node a (Tree a) (Tree a)
+data Tree a = Leaf | Node a (Tree a) (Tree a) deriving (Eq, Show)
 
 -- Maybe é uma estrutura de dados que tem ou não tem valor dentro.
 -- data Maybe a = Nothing | Just a
@@ -41,6 +41,5 @@ procurarNaLista (Carruagem (chave, valor) cauda) k
 -- É just valor, por ser um maybe
     | chave == k = Just valor
     | otherwise = procurarNaLista cauda k
-
 
 -- Pattern matching - obter nomes para aprtes que representam a estrutra dos dados 
