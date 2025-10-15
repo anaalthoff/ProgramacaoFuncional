@@ -1,6 +1,6 @@
 -- I/O é parecido com o Maybe: pode ter qualquer coisa ou não
 -- Após inputs e outputs, pode ter ou não valores
--- Monard: valor embooleado dentro do contexto
+-- Monad = Valor + Contexto + Regras de como combinar/compor esses valores
 -- ioSucc está no prulude
 ioSucc :: IO ()
 ioSucc = do
