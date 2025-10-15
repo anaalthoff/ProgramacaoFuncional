@@ -49,3 +49,6 @@
 -- dec2int = foldl (\acc -> ((+).(*10)) acc) 0
 -- dec2int = foldl ((+).(*10)) 0
 
+-- Lazy evaluation significa que as expressões não são avaliadas (executadas) até que o resultado realmente seja necessário. Ou seja, em vez de calcular tudo imediatamente, o programa adianta apenas o suficiente para saber o que precisa no momento.
+-- Permite simplificar o código
+-- 
