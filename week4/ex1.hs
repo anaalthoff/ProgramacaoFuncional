@@ -4,12 +4,12 @@
 
 -- Sinônimo:
 -- type Point = (Double, Double, Double)
--- uclideanDist :: Point -> Point -> Double
+-- EuclideanDist :: Point -> Point -> Double
 
 -- Data
 -- Diferença: com Data irá ter construtores. Uma função que instancia
 -- Como definir o tipo árvore
--- Leaf e Node são construtores de valores, funções que recebem argumentos e devolvem instância do tipo tree. Leaf não tem argumentos, node tem argumentos, vai para a esquerda ou direita.
+-- Leaf e Node são construtores de valores, funções que recebem argumentos e devolvem instâncias do tipo tree. Leaf não tem argumentos, node tem argumentos, vai para a esquerda ou direita.
 data Tree a = Leaf | Node a (Tree a) (Tree a) deriving (Eq, Show)
 
 -- Maybe é uma estrutura de dados que tem ou não tem valor dentro.
@@ -36,13 +36,13 @@ procurarNaLista :: (Eq k) => Lista (k, v) -> k -> Maybe v
 -- Caso base: lista vazia
 procurarNaLista Vazia _ = Nothing
 -- Caso recursivo: lista não vazia
--- Fazre pattern Matching com os construtores
+-- Fazer pattern Matching com os construtores
 procurarNaLista (Carruagem (chave, valor) cauda) k
-  -- É just valor, por ser um maybe
+  -- É Just valor, por ser um maybe
   | chave == k = Just valor
   | otherwise = procurarNaLista cauda k
 
--- Pattern matching - obter nomes para aprtes que representam a estrutra dos dados
+-- Pattern matching - obter nomes para partes que representam a estrutura dos dados
 
 -- Maybe
 estaNaLista :: (Eq k) => Lista (k, v) -> k -> Bool
