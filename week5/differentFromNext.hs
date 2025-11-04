@@ -1,0 +1,28 @@
+-- Implement differentFromNext which receives a list and returns all the elements that are different to the one that comes next in the list. 
+-- Usage examples: 
+-- *Main> differentFromNext "aabbaacca" 
+-- "abac" 
+-- *Main> differentFromNext "aab"
+-- "a" 
+-- *Main> differentFromNext "aaa" 
+-- ""
+
+-- recursão: casos bases: lista vazia ou apenas 1 elemento
+-- [] -> []
+-- [_] = []
+-- (x:y:xs)
+
+-- LI-17, LI-31 - differentFromNext, com rec e list comprehension
+-- IP-5 - reverseUntil
+-- UT-18 - inserting an element in a BST (copiar a estrutura de dados da resolução do UT-15)
+-- HO-13 - result of HO expressions
+-- FT-14 - scalarProduct, com rec e list comprehension
+-- HO-18 - any using rec, map and other ho-functions
+-- LI-10 - cycle with recursion
+-- IP-4 - explain the error in the expression
+-- LI-16b, LI-33 - zip3, com rec e list comprehension
+-- HO-32 - map using a fold
+-- UT-12 - syntax tree definition
+-- UT-13, UT-14 - operations on syntax trees
+-- LI-29 - result of list comprehension expressions
+-- FT-19 - rec function analysis
