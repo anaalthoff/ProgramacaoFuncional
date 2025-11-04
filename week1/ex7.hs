@@ -1,13 +1,13 @@
 -- 1 + False -> type error, não dá para comparar integer e booleano
 -- ’a’ + ’b’ -> type error, não é numérico para somar
--- ’a’ ++ ’b’ -> type error (tenta concatenar listas que não são listas, caracter não é lista, string sim)
+-- ’a’ ++ ’b’ -> type error (tenta concatenar caracteres, não listas. Caracter não é lista, string sim)
 -- "a" ++ "b" -> válido -> tem strings - lista de caracteres - ao invés de caracteres
 -- "1+2" == "3" -> válido, compara strings. O resultado é falso, mas é válido
 -- 1+2 == "3" -> type error, não é válido, é um integer comparando com uma string
 -- show (1+2) == "3" -> válido, show transforma em uma string
 -- ’a’ < ’b’ -> válido, compara caracteres em termos de ordem. 
 -- ’a’ < "ab" -> type error, compara caracter com string, um é um símbolo e o outro é lista
--- (1 <= 2) <= 3 -> type error, o primeiro vai resulatr em um booleano, por isos não dá para comparara booleano e integer
+-- (1 <= 2) <= 3 -> type error, o primeiro vai resulatr em um booleano, por isso não dá para comparar booleano e integer
 -- (1 <= 2) < (3 <= 4) -> válido, pode ordenar booleanos
 -- head [1,2] -> válido, head de uma lista, resultado vai ser 1
 -- head (1,2) -> type error, head de uma tupla, head não aplica a tuplas, usar frt e snd com tuplas

@@ -1,33 +1,31 @@
 -- 2.3 Consider two definitions of the max e min from the standard Prelude:
--- max, min :: Ord a => a-> a-> a
+-- max, min :: Ord a => a -> a -> a
 -- max x y = if x >= y then x else y
 -- min x y = if x <= y then x else y
 
 -- (a) Write similar definitions for two functions max3 e min3 that compute the maximum and minimum between three values.
+-- Conditional expression
 max3 :: (Ord a) => a -> a -> a -> a
 max3 x y z =
-  if x >= y && x >= z
-    then x
-    else
-      if y >= x && y >= z
-        then y
-        else z
+  if x >= y && x >= z then x
+  else if y >= x && y >= z then y
+  else z
 
+-- Guards
 max3'' :: (Ord a) => a -> a -> a -> a
 max3'' x y z
   | x >= y && x >= z = x
   | y >= x && y >= z = y
   | otherwise = z
 
+-- Conditional expression
 min3 :: (Ord a) => a -> a -> a -> a
 min3 x y z =
-  if x <= y && x <= z
-    then x
-    else
-      if y <= x && y <= z
-        then y
-        else z
+  if x <= y && x <= z then x
+  else if y <= x && y <= z then y
+  else z
 
+-- Guards
 min3'' :: (Ord a) => a -> a -> a -> a
 min3'' x y z
   | x <= y && x <= z = x
