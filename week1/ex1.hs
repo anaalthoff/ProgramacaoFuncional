@@ -12,6 +12,9 @@ count str = show (length str) ++ " characters."
 
 -- No terminal, escreve ghci e abre o terminal.
 -- ghci :l ex1.hs (carrega o arquivo que deseja)
+-- :r (recarrega)
+-- :q (sai do ghci)
+-- :t (informa o tipo)
 -- Assim que carregar, já pode usar os módulos
 -- Num e => e -> e é uma forma de aceitar números, float, real, etc. Não apenas inteiro, ou double, ou float, por exemplo
 
