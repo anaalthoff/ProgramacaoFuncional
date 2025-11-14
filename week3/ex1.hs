@@ -1,54 +1,37 @@
--- Função de ordem superior: uma função que recebe outra
--- Map tem dois ingredientes: uma função e uma lista. Aplica a função a todos os elementos da lista
--- Ex: map(*2)[1,2,3] = [2,4,6]
--- Ex: filterodd[1,2,3,4] = [1,3] - função que retorna um booleano - essa função já existe no preludio
--- zipWith(+)[1,2,3][1,2,3] = [2,4,6] - um zip que vai juntar os elementos
--- ((+2).(*3))10 - o ponto é fazre um seguida do outro - chama-se composição de funções
---   f    y      - a função +2 é aplicada após *3
--- sqrt$1+2+3 - $ é o operador da função de argumentos - só vai passra ao sqrt o input apenas após calcular tudo que está à direita! Se não tivesse $, daria 6, mas com $ deu como resultado sqrt (1+2+3). $ poupa o tempo de fechar os parênteses
--- foldl (-)0[1,2,3] - uma função que vai mastigar uma lista, vai condensá-la em um valor, e esse valor é do mesmo tipo que um acumulador (variável que permite guardar o resultado intermédio do resultado).
--- escreva a lista 1 2 3. COmo é left, o acumulado será o da esquerda (0). Fica 0 1 2 3. Junta os elementos com a função, ficando 0 -1 -2 -3. COmo é left, começam as operações pela esquerda, acumulador acompanha sempre o resultado. 
--- primeiro: (0-1)-2-3
--- Depois: (-1-2)-3
--- Depois: -3-3
--- Depois: -6
--- O lambda fica: \ acc x -> acc -x)
--- foldr (-)0[1,2,3]
--- 1 2 3
--- Acumulado é à direita: 1 2 3 0
--- 1-(2-(3-0)
--- 1-(2-3)
--- 1-(-1)
--- 2
--- O lambda fica: \ x acc -> x -acc)
--- Ambos folds tem 3 argumentos: função que será aplicada aos elementos da lista, valor inicial do acumulador, lista que será processada
--- A foldl é O(n) e a foldr é O(n²)
+import System.Win32 (xBUTTON1)
 
--- rev l = revAuxl[]
--- revAux[]acc=acc
--- revAux(x:xs)acc = revAux xs(x:acc)
--- mais eficiente, mas pode não ser
--- rev l = foldl(\ acc -> x:acc)[]l
+-- 3.1 Write your own recursive definitions for the following Prelude functions. Use different names in order to avoid clashes, e.g. define a function myand instead of and.
 
--- recursão naive, pode fazer sempre, mas nem sempre mais prática
--- rev[]=[]
--- rev(x:xs)rev xs ++ [x]
--- mais genérico
--- rev l = foldr(\ acc x -> acc++[x])[]l
+-- (a) and :: [Bool] -> Bool — test if all values are true;
+myand :: [Bool] -> Bool
+myand [] = True
+-- Porque não há elementos falsos, então "todos os elementos são verdadeiros" é trivialmente True.
+myand (x : xs) = x && myand xs
 
--- Currying - é um conceito relacionado a transformar funções de múltiplos argumentos em funções de um único argumento que retornam outras funções.
+-- (b) or :: [Bool] -> Bool — test if some values are true;
+myor :: [Bool] -> Bool
+myor [] = False
+-- Por convenção, se não há elementos, nenhum deles é True.
+myor (x : xs) = x || myor xs
 
--- Pode-se omitir argumentos em haskel, eles ficam implícitos
--- Point free programming - tudo começa com uma operação básica
--- f x = g x, assim, f = g, já que tudo que f recebe será igual ao que g recebe
--- dec2int = foldl (\acc x -> acc*10 + x) 0 
--- dec2int = foldl (\acc x -> (+) (acc*10) x) 0
--- dec2int = foldl (\acc -> (+) (acc*10)) 0
--- dec2int = foldl (\acc -> (+) (acc*10)) 0
--- dec2int = foldl (\acc -> (+) ((*10) acc)) 0
--- dec2int = foldl (\acc -> ((+).(*10)) acc) 0
--- dec2int = foldl ((+).(*10)) 0
+-- (c) concat :: [[a]] -> [a] — concatenate a list of lists;
+myconcat :: [[a]] -> [a]
+myconcat [] = []
+myconcat (x : xs) = x ++ myconcat xs
 
--- Lazy evaluation significa que as expressões não são avaliadas (executadas) até que o resultado realmente seja necessário. Ou seja, em vez de calcular tudo imediatamente, o programa adianta apenas o suficiente para saber o que precisa no momento.
--- Permite simplificar o código
--- 
+-- (d) replicate :: Int -> a -> [a] values; — produce a list with repetead
+myreplicate :: Int -> a -> [a]
+myreplicate n x
+  | n <= 0 = []
+  | otherwise = x : myreplicate (n - 1) x
+
+-- (e) (!!) :: [a] -> Int -> a — index the n-th value in a list (starting from zero);
+myindex :: [a] -> Int -> a
+myindex [] _ = error "index out of bounds"
+myindex (x : xs) 0 = x
+myindex (x : xs) n = myindex xs (n - 1)
+
+-- (f) elem :: Eq a => a -> [a] -> Bool — check if a value occurs in a list.
+myelem :: Eq a => a -> [a] -> Bool
+myelem _ [] = False
+myelem y (x:xs) = (y == x) || myelem y xs
