@@ -1,5 +1,3 @@
-import System.Win32 (xBUTTON1)
-
 -- 3.1 Write your own recursive definitions for the following Prelude functions. Use different names in order to avoid clashes, e.g. define a function myand instead of and.
 
 -- (a) and :: [Bool] -> Bool — test if all values are true;
