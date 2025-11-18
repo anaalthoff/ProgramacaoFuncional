@@ -6,20 +6,30 @@
 
 module Main where
 
-import Data.Char (isDigit)
+-- precisa testar caracteres: isAlpha para variáveis (letras) e isDigit para números
+import Data.Char(isAlpha, isDigit)
 import Parsing (Parser, char, many1, parse, satisfy, (<|>))
 
---
+-- novo tipo Name e Env (ambiente) para guardar pares (variável, valor);
+type Name = String
+type Env = [(Name, Integer)]
+
 -- a data type for expressions
 -- made up from integer numbers, + and *
 -- O data type é o "modelo" das expressões — igual uma classe em outras linguagens, mas imutável e puramente estrutural.
---
 data Expr = Num Integer
+          -- Expr ganhou o construtor Var Name;
+          | Var Name
           | Add Expr Expr
           | Mul Expr Expr
           | Sub Expr Expr
           | Div Expr Expr
           | Mod Expr Expr
+          deriving (Show)
+
+-- foi criado Command para representar 'Assign Name Expr' e 'Eval Expr';
+data Command = Assign Name Expr -- → corresponde a name = expr.
+          | Eval Expr           -- → corresponde a uma linha só com uma expressão (ex.: 2+3).
           deriving (Show)
 
 -- A expressão "3 + 4" vira:
@@ -29,14 +39,17 @@ data Expr = Num Integer
 -- Mul (Mul (Num 2) (Num 3)) (Num 4)
 
 -- a recursive evaluator for expressions
---
-eval :: Expr -> Integer
-eval (Num n) = n
-eval (Add e1 e2) = eval e1 + eval e2
-eval (Mul e1 e2) = eval e1 * eval e2
-eval (Sub e1 e2) = eval e1 - eval e2
-eval (Div e1 e2) = eval e1 `div` eval e2
-eval (Mod e1 e2) = eval e1 `mod` eval e2
+-- o avaliador eval agora recebe Env / ambiente (type Env = [(Name, Integer)]) para resolver variáveis;
+eval :: Env -> Expr -> Integer
+eval env (Num n) = n
+eval env (Add e1 e2) = eval env e1 + eval env e2
+eval env (Mul e1 e2) = eval env e1 * eval env e2
+eval env (Sub e1 e2) = eval env e1 - eval env e2
+eval env (Div e1 e2) = eval env e1 `div` eval env e2
+eval env (Mod e1 e2) = eval env e1 `mod` eval env e2
+eval env (Var x) = case lookup x env of
+                      Just v -> v
+                      Nothing -> error ("Undefined variable: " ++ x)
 
 -- Sobre divisão: o operador / não funciona para Integer em Haskell.
 -- Ele é apenas para tipos Fractional (Float, Double), mas o seu parser e o Expr trabalham com Integer.
@@ -66,10 +79,10 @@ exprCont acc =
       do char '+'
          t <- term
          exprCont (Add acc t)
-    <|> do char '-'
-           t <- term
-           exprCont (Sub acc t)
-    <|> return acc
+  <|> do char '-'
+         t <- term
+         exprCont (Sub acc t)
+  <|> return acc
 
 -- Se achar +, continua acumulando.
 -- Senão, retorna o valor acumulado (acc).
@@ -110,15 +123,24 @@ termCont acc =
          termCont (Mod acc t)
   <|> return acc
 
+-- factor tenta três opções (ordem importante):
+-- número (natural),
+-- variável (variable),
+-- expressão entre parênteses.
+
 factor :: Parser Expr
 factor =
       do n <- natural
          return (Num n)
+  -- verifica se é uma variável   
+  <|> do v <- variable
+         return (Var v)
   <|> do
-        char '('
-        e <- expr
-        char ')'
-        return e
+         char '('
+         e <- expr
+         char ')'
+         return e
+
 -- O que faz:
 -- factor lida com a parte mais básica de uma expressão:
 -- Um número natural (123, 5, etc.)
@@ -136,7 +158,34 @@ factor =
 natural :: Parser Integer
 natural = do
   xs <- many1 (satisfy isDigit)
+  -- read converte string para inteiro
   return (read xs)
+
+-- add um parser para variáveis
+variable :: Parser Name
+variable = many1 (satisfy isAlpha)
+
+-- add parser command (que reconhece x = expr ou só expr);
+command = 
+      do
+        v <- variable
+        char '='
+        e <- expr
+        return (Assign v e)
+  <|> do
+        e <- expr
+        return (Eval e)
+
+-- funções execCommand e execute aplicam comandos ao Env e retornam (output, novoEnv);
+-- Caso Eval e: apenas avalia e com eval env e, converte pra String com show e não modifica o env (retorna env inalterado).
+execCommand env (Eval e) = (show (eval env e), env)
+execCommand env (Assign name e) = 
+    let v = eval env e
+        env' = (name, v): filter((/= name) . fst) env
+       -- coloca (name, v) no começo da lista,
+       -- filtra entradas antigas com mesmo name (remoção da antiga associação), garantindo que a nova associação sobrescreva a antiga.
+    in (show v, env')
+    -- imprime o valor atribuído (ex.: x=1 imprime 1).
 
 ----------------------------------------------------------------
 
@@ -144,18 +193,26 @@ main :: IO ()
 main =
   do
     txt <- getContents
-    calculator (lines txt)
+    -- getContents lê todo o stdin como String
+    calculator [] (lines txt)
+    -- lines: pega um texto, onde tiver quebra de linha, retorna uma lista de strings
+    -- inicia calculator com env = [] (ambiente vazio).
 
 -- | read-eval-print loop
-calculator :: [String] -> IO ()
-calculator [] = return ()
-calculator (l : ls) = do
-  putStrLn (evaluate l)
-  calculator ls
+-- calculator é o read-eval-print loop que processa cada linha:
+calculator :: Env -> [String] -> IO ()
+-- quando lista vazia, termina;
+calculator env [] = return ()
+calculator env (l : ls) =
+  let (out, env') = execute env l 
+  in do putStrLn out
+        calculator env' ls
+-- para cada linha l, chama execute env l que retorna (out, env').
+-- imprime out e chamamos recursivamente com env' (propagando alterações feitas por atribuições).
 
--- | evaluate a single expression
-evaluate :: String -> String
-evaluate txt =
-  case parse expr txt of
-    [(tree, "")] -> show (eval tree)
-    _ -> "parse error; try again"
+-- | execute a command
+execute :: Env -> String -> (String, Env)
+execute env txt =
+  case parse command txt of
+    [(tree, "")] -> execCommand env tree
+    _ -> ("parse error; try again", env)

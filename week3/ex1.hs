@@ -12,7 +12,7 @@ myor [] = False
 -- Por convenção, se não há elementos, nenhum deles é True.
 myor (x : xs) = x || myor xs
 
--- (c) concat :: [[a]] -> [a] — concatenate a list of lists;
+-- (c) concat :: [[a]] -> [a] — concat transforma uma lista de listas em uma única lista;
 myconcat :: [[a]] -> [a]
 myconcat [] = []
 myconcat (x : xs) = x ++ myconcat xs
